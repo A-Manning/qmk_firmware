@@ -85,4 +85,7 @@ API_SYSEX_ENABLE = no
 RGBLIGHT_ENABLE = yes
 RGB_MATRIX_ENABLE = no // enable later
 
+# enables double, triple, n-taps.
+TAP_DANCE_ENABLE=yes
+
 LAYOUTS = ergodox
