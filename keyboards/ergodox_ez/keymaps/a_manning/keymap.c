@@ -17,18 +17,31 @@ enum custom_keycodes {
 
 // Tap Dance Declarations
 enum {
-    TD_LPRN_LSFT = 0 // Left space-cadet shift
+    TD_LPRN_LSFT = 0, // Left space-cadet shift
+    TD_RPRN_RSFT,
+    TD_LBRC_LCTL
 };
 
-// left space-cadet shift
+// left space-cadet
 void td_lprn_lsft_tap (qk_tap_dance_state_t *state, void *user_data) {
-    td_layer_kc1_kc2_tap(state, SBASE, KC_LSFT, KC_9);
+    td_layer_kc1_kc2_tap(state, SBASE, KC_RSFT, KC_9);
 };
 void td_lprn_lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
-    td_layer_kc1_kc2_finished(state, SBASE, KC_LSFT, KC_9);
+    td_layer_kc1_kc2_finished(state, SBASE, KC_RSFT, KC_9);
 };
 void td_lprn_lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
-    td_layer_kc1_kc2_reset(state, SBASE, KC_LSFT, KC_9);
+    td_layer_kc1_kc2_reset(state, SBASE, KC_RSFT, KC_9);
+};
+
+// right space-cadet
+void td_rprn_rsft_tap (qk_tap_dance_state_t *state, void *user_data) {
+    td_layer_kc1_kc2_tap(state, SBASE, KC_RSFT, KC_0);
+};
+void td_rprn_rsft_finished (qk_tap_dance_state_t *state, void *user_data) {
+    td_layer_kc1_kc2_finished(state, SBASE, KC_RSFT, KC_0);
+};
+void td_rprn_rsft_reset (qk_tap_dance_state_t *state, void *user_data) {
+    td_layer_kc1_kc2_reset(state, SBASE, KC_RSFT, KC_0);
 };
 
 // Tap Dance Definitions
@@ -37,7 +50,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 //  [TD_IDENT]     = ACTION_TAP_DANCE_X(args)
     [TD_LPRN_LSFT] = ACTION_TAP_DANCE_FN_ADVANCED(td_lprn_lsft_tap,
                                                   td_lprn_lsft_finished,
-                                                  td_lprn_lsft_reset)
+                                                  td_lprn_lsft_reset),
+    [TD_LBRC_LCTL] = ACTION_TAP_DANCE_DOUBLE(S(KC_LBRC), KC_LCTL)
 };
 
 
@@ -51,16 +65,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * | tab/FN |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   ;  | ENTER  |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | (/up   |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |      |   /  | )/UP   |
+ * | (/up   |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  | )/UP   |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |{/ctrl|      |      | win  | alt  |                                       |      |      |      |      |      |
+ *   |{/ctrl|      |      | win  | alt  |                                       |      |      |      |      |   }    |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |        |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      |      |       |      |        |      |
  *                                 | Space|      |------|       |------|        |space |
- *                                 |      |      | win  |       | alt  |        |      |
+ *                                 |      |      | ctrl |       | alt  |        |      |
  *                                 `--------------------'       `----------------------'
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
@@ -71,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,           KC_Q,    KC_W,  KC_E,    KC_R,    KC_T,  KC_NO,
         LT(FN1, KC_TAB), KC_A,    KC_S,  KC_D,    KC_F,    KC_G,
         TD(TD_LPRN_LSFT), KC_PIPE, KC_Z,  KC_X,    KC_C,    KC_V,  KC_NO,
-        CTL_T(KC_LBRC),  KC_NO,   KC_NO, KC_LWIN, KC_LALT,
+        TD(TD_LBRC_LCTL),  KC_NO,   KC_NO, KC_LWIN, KC_LALT,
                                                            KC_NO, KC_NO,
                                                                   KC_NO,
                                                   KC_SPC,  KC_NO, KC_LWIN,
