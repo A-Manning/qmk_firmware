@@ -21,6 +21,9 @@ enum {
 };
 
 // left space-cadet shift
+void td_lprn_lsft_tap (qk_tap_dance_state_t *state, void *user_data) {
+    td_layer_kc1_kc2_tap(state, SBASE, KC_LSFT, KC_9);
+};
 void td_lprn_lsft_finished (qk_tap_dance_state_t *state, void *user_data) {
     td_layer_kc1_kc2_finished(state, SBASE, KC_LSFT, KC_9);
 };
@@ -32,7 +35,9 @@ void td_lprn_lsft_reset (qk_tap_dance_state_t *state, void *user_data) {
 // Can be used as // TD(TD_IDENT)
 qk_tap_dance_action_t tap_dance_actions[] = {
 //  [TD_IDENT]     = ACTION_TAP_DANCE_X(args)
-    [TD_LPRN_LSFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lprn_lsft_finished, td_lprn_lsft_reset)
+    [TD_LPRN_LSFT] = ACTION_TAP_DANCE_FN_ADVANCED(td_lprn_lsft_tap,
+                                                  td_lprn_lsft_finished,
+                                                  td_lprn_lsft_reset)
 };
 
 
