@@ -7,7 +7,7 @@
 #define PERMISSIVE_HOLD
 
 // set up auto shift
-#define AUTO_SHIFT_TIMEOUT 100 //timeout to shift, works like TAPPING_TERM
+#define AUTO_SHIFT_TIMEOUT 150 //timeout to shift, works like TAPPING_TERM
 #define NO_AUTO_SHIFT_SPECIAL // no shift symbols
 #define NO_AUTO_SHIFT_NUMERIC // no shift numeric row
 

@@ -73,7 +73,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                        |      |      |       |      |        |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      |      |       |      |        |      |
- *                                 | Space| bspc |------|       |------|  enter |space |
+ *                                 | Space| bspc |------|       |------|  bspc  |  ent |
  *                                 |      |      |      |       |      |        |      |
  *                                 `--------------------'       `----------------------'
  */
@@ -98,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
         S(KC_SLSH), KC_NO,
         KC_NO,
-        KC_RALT,    KC_ENT, KC_SPC
+        KC_RALT,    KC_BSPC, KC_ENT
 
     ),
 
@@ -118,8 +118,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |  ?   |        |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 | ls+  | Del  |      |       |      |  ls+   | ls+  |
- *                                 | spc  |      |------|       |------|  ENT   | spc  |
+ *                                 | ls+  | Del  |      |       |      |  Del   | ls+  |
+ *                                 | spc  |      |------|       |------|        | ent  |
  *                                 |      |      |      |       |      |        |      |
  *                                 `--------------------'       `----------------------'
  */
@@ -143,7 +143,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
        KC_NO,   KC_NO,
        KC_NO,
-       KC_NO,   S(KC_ENT), S(KC_SPC)
+       KC_NO,   KC_DEL, S(KC_ENT)
 ),
 /* Keymap 2: Function keys
  *
