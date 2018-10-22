@@ -12,13 +12,25 @@ enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
   EPRM,
   VRSN,
-  RGB_SLD
+  RGB_SLD,
+  LCTL
 };
 
 // Tap Dance Declarations
 enum {
     LSFT = 0, // Left space-cadet shift
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    BKTK,
     LBRC,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    ZERO,
     RBRC,
     QUOT,
     COMM,
@@ -27,12 +39,33 @@ enum {
     RSFT,
 };
 
-// left space-cadet
-TDTKHL(lsft, KC_BSLS, SBASE)
-// right space-cadet
-TDTKHL(rsft, KC_SLSH, SBASE)
+
+// 1 !
+TDTKTK2(one, KC_1, KC_LSFT, KC_1)
+// 2 @
+TDTKTK2(two, KC_2, KC_LSFT, KC_2)
+// 3 #
+TDTKTK2(three, KC_3, KC_LSFT, KC_3)
+// 4 $
+TDTKTK2(four, KC_4, KC_LSFT, KC_4)
+// 5 %
+TDTKTK2(five, KC_5, KC_LSFT, KC_5)
+// ` ~
+TDTKTK2(bktk, KC_GRV, KC_LSFT, KC_GRV)
 // { [
 TDTK2TK(lbrc, KC_LSFT, KC_LBRC, KC_LBRC)
+// left space-cadet
+TDTKHL(lsft, KC_BSLS, SBASE)
+// 6 ^
+TDTKTK2(six, KC_6, KC_LSFT, KC_6)
+// 7 &
+TDTKTK2(seven, KC_7, KC_LSFT, KC_7)
+// 8 *
+TDTKTK2(eight, KC_8, KC_LSFT, KC_8)
+// 9 <
+TDTKTK2(nine, KC_9, KC_LSFT, KC_COMM)
+// 0 >
+TDTKTK2(zero, KC_0, KC_LSFT, KC_DOT)
 // } ]
 TDTK2TK(rbrc, KC_LSFT, KC_RBRC, KC_RBRC)
 // ' "
@@ -43,20 +76,39 @@ TDTKTK(comm, KC_COMM, KC_SCLN)
 TDTKTK2(dot, KC_DOT, KC_LSFT, KC_SCLN)
 // / ?
 TDTKTK2(slsh, KC_SLSH, KC_LSFT, KC_SLSH)
+// right space-cadet
+TDTKHL(rsft, KC_SLSH, SBASE)
 
-
+void lctl(void) {
+    if (MOD_LCTL == (get_oneshot_mods()&MOD_LCTL)) {
+        set_oneshot_mods(MOD_LCTL^get_oneshot_mods());
+    } else {
+        set_oneshot_mods(MOD_LCTL|get_oneshot_mods());
+    }
+};
 
 // Tap Dance Definitions
 // Can be used as // TD(TD_IDENT)
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [LSFT] = TDFN(lsft),
-    [LBRC] = TDFN(lbrc),
-    [RBRC] = TDFN(rbrc),
-    [QUOT] = TDFN(quot),
-    [COMM] = TDFN(comm),
-    [DOT]  = TDFN(dot),
-    [SLSH] = TDFN(slsh),
-    [RSFT] = TDFN(rsft)
+    [ONE]   = TDFN(one),
+    [TWO]   = TDFN(two),
+    [THREE] = TDFN(three),
+    [FOUR]  = TDFN(four),
+    [FIVE]  = TDFN(five),
+    [BKTK]  = TDFN(bktk),
+    [LBRC]  = TDFN(lbrc),
+    [LSFT]  = TDFN(lsft),
+    [SIX]   = TDFN(six),
+    [SEVEN] = TDFN(seven),
+    [EIGHT] = TDFN(eight),
+    [NINE]  = TDFN(nine),
+    [ZERO]  = TDFN(zero),
+    [RBRC]  = TDFN(rbrc),
+    [QUOT]  = TDFN(quot),
+    [COMM]  = TDFN(comm),
+    [DOT]   = TDFN(dot),
+    [SLSH]  = TDFN(slsh),
+    [RSFT]  = TDFN(rsft)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -85,20 +137,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
         // left hand
-        KC_ESC,          KC_1,  KC_2,  KC_3,    KC_4,    KC_5,    KC_NO,
-        KC_GRV,          KC_Q,  KC_W,  KC_E,    KC_R,    KC_T,    TD(LBRC),
-        LT(FN1, KC_TAB), KC_A,  KC_S,  KC_D,    KC_F,    KC_G,
-        TD(LSFT),        KC_Z,  KC_X,  KC_C,    KC_V,    KC_B,    S(KC_9),
-        OSM(MOD_LCTL),   KC_NO, KC_NO, KC_LWIN, KC_LALT,
-                                                         KC_NO,   KC_NO,
-                                                                  KC_NO,
-                                                KC_SPC,  KC_BSPC, KC_LALT,
+        KC_ESC,          TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
+        TD(BKTK),        KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LBRC),
+        LT(FN1, KC_TAB), KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
+        TD(LSFT),        KC_Z,    KC_X,    KC_C,      KC_V,     KC_B,     S(KC_9),
+        LCTL,            KC_NO,   KC_NO,   KC_LWIN,   KC_LALT,
+                                                                KC_NO,   KC_NO,
+                                                                         KC_NO,
+                                                      KC_SPC,   KC_BSPC, KC_LALT,
         // right hand
-        KC_NO,    KC_6,    KC_7,  KC_8,     KC_9,    KC_0,     KC_NO,
-        TD(RBRC), KC_Y,    KC_U,  KC_I,     KC_O,    KC_P,     KC_MINS,
-                  KC_H,    KC_J,  KC_K,     KC_L,    TD(QUOT), KC_EQL,
-        S(KC_0),  KC_N,    KC_M,  TD(COMM), TD(DOT), TD(SLSH), TD(RSFT),
-                           KC_NO, KC_NO,    KC_NO,   KC_NO,    KC_RCTL,
+        KC_NO,    TD(SIX), TD(SEVEN), TD(EIGHT), TD(NINE), TD(ZERO), KC_NO,
+        TD(RBRC), KC_Y,    KC_U,      KC_I,      KC_O,     KC_P,     KC_MINS,
+                  KC_H,    KC_J,      KC_K,      KC_L,     TD(QUOT), KC_EQL,
+        S(KC_0),  KC_N,    KC_M,      TD(COMM),  TD(DOT),  TD(SLSH), TD(RSFT),
+                           KC_NO,     KC_NO,     KC_NO,    KC_NO,    KC_RCTL,
 
         KC_NO,    KC_NO,
         KC_NO,
@@ -234,6 +286,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #ifdef RGBLIGHT_ENABLE
           rgblight_mode(1);
         #endif
+      }
+      return false;
+      break;
+    case LCTL:
+      if (record->event.pressed) {
+        lctl();
       }
       return false;
       break;
