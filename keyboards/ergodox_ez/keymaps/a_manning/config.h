@@ -1,7 +1,7 @@
 #include "../../config.h"
 
 #undef  TAPPING_TERM
-#define TAPPING_TERM 200
+#define TAPPING_TERM 180
 
 // makes lsft ok
 #define PERMISSIVE_HOLD
@@ -9,7 +9,7 @@
 #define IGNORE_MOD_TAP_INTERRUPT
 
 // set up auto shift
-#define AUTO_SHIFT_TIMEOUT 200 //timeout to shift, works like TAPPING_TERM
+#define AUTO_SHIFT_TIMEOUT 180 //timeout to shift, works like TAPPING_TERM
 #define NO_AUTO_SHIFT_SPECIAL // no shift symbols
 #define NO_AUTO_SHIFT_NUMERIC // no shift numeric row
 
