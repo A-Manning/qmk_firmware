@@ -17,37 +17,32 @@ enum custom_keycodes {
 
 // Tap Dance Declarations
 enum {
-    TD_LSFT = 0, // Left space-cadet shift
-    TD_RSFT
+    LSFT = 0, // Left space-cadet shift
+    LBRC,
+    RBRC,
+    QUOT,
+    COMM,
+    DOT,
+    SLSH,
+    RSFT,
 };
-/*
-// left space-cadet
-void td_tap_bsls (qk_tap_dance_state_t *state, void *user_data) {
-    tk2(state, KC_NO, KC_BSLS);
-};
-void td_fin_bsls (qk_tap_dance_state_t *state, void *user_data) {
-    tk2_hl(state, KC_NO, KC_BSLS, SBASE);
-};
-void td_rst_bsls (qk_tap_dance_state_t *state, void *user_data) {
-    rsl(SBASE);
-};
-
-// right space-cadet
-void td_tap_slsh (qk_tap_dance_state_t *state, void *user_data) {
-    tk2(state, KC_NO, KC_SLSH);
-};
-void td_fin_slsh (qk_tap_dance_state_t *state, void *user_data) {
-    tk2_hl(state, KC_NO, KC_SLSH, SBASE);
-};
-void td_rst_slsh (qk_tap_dance_state_t *state, void *user_data) {
-    rsl(SBASE);
-};
-*/
 
 // left space-cadet
 TDTKHL(lsft, KC_BSLS, SBASE)
 // right space-cadet
 TDTKHL(rsft, KC_SLSH, SBASE)
+// { [
+TDTK2TK(lbrc, KC_LSFT, KC_LBRC, KC_LBRC)
+// } ]
+TDTK2TK(rbrc, KC_LSFT, KC_RBRC, KC_RBRC)
+// ' "
+TDTKTK2(quot, KC_QUOT, KC_LSFT, KC_QUOT)
+// , ;
+TDTKTK(comm, KC_COMM, KC_SCLN)
+// . :
+TDTKTK2(dot, KC_DOT, KC_LSFT, KC_SCLN)
+// / ?
+TDTKTK2(slsh, KC_SLSH, KC_LSFT, KC_SLSH)
 
 // pointless macro test
 TDTKHK(test, KC_A, KC_B)
@@ -55,8 +50,14 @@ TDTKHK(test, KC_A, KC_B)
 // Tap Dance Definitions
 // Can be used as // TD(TD_IDENT)
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_LSFT] = TDFN(lsft),
-    [TD_RSFT] = TDFN(rsft)
+    [LSFT] = TDFN(lsft),
+    [LBRC] = TDFN(lbrc),
+    [RBRC] = TDFN(rbrc),
+    [QUOT] = TDFN(quot),
+    [COMM] = TDFN(comm),
+    [DOT]  = TDFN(dot),
+    [SLSH] = TDFN(slsh),
+    [RSFT] = TDFN(rsft)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -86,23 +87,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
         // left hand
         KC_ESC,          KC_1,  KC_2,  KC_3,    KC_4,    KC_5,    KC_NO,
-        KC_GRV,          KC_Q,  KC_W,  KC_E,    KC_R,    KC_T,    S(KC_LBRC),
+        KC_GRV,          KC_Q,  KC_W,  KC_E,    KC_R,    KC_T,    TD(LBRC),
         LT(FN1, KC_TAB), KC_A,  KC_S,  KC_D,    KC_F,    KC_G,
-        TD(TD_LSFT),     KC_Z,  KC_X,  KC_C,    KC_V,    KC_B,    S(KC_9),
+        TD(LSFT),        KC_Z,  KC_X,  KC_C,    KC_V,    KC_B,    S(KC_9),
         KC_LCTL,         KC_NO, KC_NO, KC_LWIN, KC_LALT,
                                                          KC_NO,   KC_NO,
                                                                   KC_NO,
                                                 KC_SPC,  KC_BSPC, KC_LALT,
         // right hand
-        KC_NO,      KC_6,    KC_7,  KC_8,    KC_9,   KC_0,    KC_NO,
-        S(KC_RBRC), KC_Y,    KC_U,  KC_I,    KC_O,   KC_P,    KC_MINS,
-                    KC_H,    KC_J,  KC_K,    KC_L,   KC_QUOT, KC_EQL,
-        S(KC_0),    KC_N,    KC_M,  KC_COMM, KC_DOT, KC_SLSH, TD(TD_RSFT),
-                             KC_NO, KC_NO,   KC_NO,  KC_NO,   KC_RCTL,
+        KC_NO,    KC_6,    KC_7,  KC_8,     KC_9,    KC_0,     KC_NO,
+        TD(RBRC), KC_Y,    KC_U,  KC_I,     KC_O,    KC_P,     KC_MINS,
+                  KC_H,    KC_J,  KC_K,     KC_L,    TD(QUOT), KC_EQL,
+        S(KC_0),  KC_N,    KC_M,  TD(COMM), TD(DOT), TD(SLSH), TD(RSFT),
+                           KC_NO, KC_NO,    KC_NO,   KC_NO,    KC_RCTL,
 
-        KC_NO,      KC_NO,
+        KC_NO,    KC_NO,
         KC_NO,
-        KC_RALT,    KC_BSPC, KC_ENT
+        KC_RALT,  KC_BSPC, KC_ENT
 
     ),
 

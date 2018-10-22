@@ -42,7 +42,7 @@ void tk2( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 )
     { if (state->count > 1) { tap2(kc1, kc2); } }
 
 
-// kc1 on tap, kc2 on hold
+// kc1 on tap, hold kc2 on hold
 void tk_hk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
     if (state->pressed) {
         reg(kc2);
@@ -51,7 +51,7 @@ void tk_hk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
     }
 }
 
-// kc on tap, l on hold
+// kc on tap, hold l on hold
 void tk_hl ( qk_tap_dance_state_t *state, uint16_t kc, uint8_t l ) {
     if (state->pressed) {
         layer_on(l);
@@ -60,7 +60,7 @@ void tk_hl ( qk_tap_dance_state_t *state, uint16_t kc, uint8_t l ) {
     }
 }
 
-// kc1 + kc2 on tap, kc3 on hold
+// kc1 + kc2 on tap, hold kc3 on hold
 void tk2_hk ( qk_tap_dance_state_t *state,
               uint16_t kc1,
               uint16_t kc2,
@@ -72,7 +72,7 @@ void tk2_hk ( qk_tap_dance_state_t *state,
     }
 }
 
-// kc1 + kc2 on tap, l on hold
+// kc1 + kc2 on tap, hold l on hold
 void tk2_hl ( qk_tap_dance_state_t *state,
               uint16_t kc1,
               uint16_t kc2,
@@ -84,7 +84,7 @@ void tk2_hl ( qk_tap_dance_state_t *state,
     }
 }
 
-// kc1 on tap, kc2 + kc3 on hold
+// kc1 on tap, hold kc2 + kc3 on hold
 void tk_hk2( qk_tap_dance_state_t *state,
              uint16_t kc1,
              uint16_t kc2,
@@ -96,7 +96,7 @@ void tk_hk2( qk_tap_dance_state_t *state,
     }
 }
 
-// kc1 + kc2 on tap, kc3 + kc4 on hold
+// kc1 + kc2 on tap, hold kc3 + kc4 on hold
 void tk2_hk2( qk_tap_dance_state_t *state,
               uint16_t kc1,
               uint16_t kc2,
@@ -106,6 +106,39 @@ void tk2_hk2( qk_tap_dance_state_t *state,
         reg2(kc3, kc4);
     } else {
         tap2(kc1, kc2);
+    }
+}
+
+// kc1 on tap, tap kc2 on hold
+void tk_tk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
+    if (state->pressed && !state->interrupted) {
+        tap(kc2);
+    } else {
+        tap(kc1);
+    }
+}
+
+// kc1 + kc2 on tap, tap kc3 on hold
+void tk2_tk ( qk_tap_dance_state_t *state,
+              uint16_t kc1,
+              uint16_t kc2,
+              uint16_t kc3 ) {
+    if (state->pressed && !state->interrupted) {
+        tap(kc3);
+    } else {
+        tap2(kc1, kc2);
+    }
+}
+
+// kc1 on tap, tap kc2 + kc3 on hold
+void tk_tk2( qk_tap_dance_state_t *state,
+             uint16_t kc1,
+             uint16_t kc2,
+             uint16_t kc3 ) {
+    if (state->pressed && !state->interrupted) {
+        tap2(kc2, kc3);
+    } else {
+        tap(kc1);
     }
 }
 
@@ -120,23 +153,4 @@ void rs2(uint16_t kc1, uint16_t kc2){
 // resets layer
 void rsl(uint8_t l){
     layer_off(l);
-}
-
-void td_layer_kc1_kc2_tap
-    (qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2) {
-    if (state->count > 1) {
-        tap2(kc1, kc2);
-    }
-}
-// moves to layer while held, otherwise sends kc2 with kc1 held down.
-void td_layer_kc1_kc2_finished
-    (qk_tap_dance_state_t *state, uint8_t layer, uint16_t kc1, uint16_t kc2) {
-    if (state->pressed) {
-        layer_on(layer);
-    } else {
-        tap2(kc1, kc2);
-    }
-}
-void td_layer_kc1_kc2_reset(uint8_t layer) {
-    layer_off(layer);
 }
