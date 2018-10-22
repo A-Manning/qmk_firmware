@@ -1,7 +1,7 @@
 #include "../../config.h"
 
 #undef  TAPPING_TERM
-#define TAPPING_TERM 150
+#define TAPPING_TERM 110
 
 // makes lsft ok
 #define PERMISSIVE_HOLD

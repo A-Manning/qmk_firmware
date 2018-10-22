@@ -33,9 +33,32 @@ void tap2(uint16_t kc1, uint16_t kc2) {
 // shift + kc
 void sh(uint16_t kc) { tap2(KC_LSFT, kc); }
 
+// kc on tap
+void tk( qk_tap_dance_state_t *state, uint16_t kc )
+    { if (state->count > 1) { tap(kc); } }
+
 // kc1 + kc2 on tap
 void tk2( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 )
     { if (state->count > 1) { tap2(kc1, kc2); } }
+
+
+// kc1 on tap, kc2 on hold
+void tk_hk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
+    if (state->pressed) {
+        reg(kc2);
+    } else {
+        tap(kc1);
+    }
+}
+
+// kc on tap, l on hold
+void tk_hl ( qk_tap_dance_state_t *state, uint16_t kc, uint8_t l ) {
+    if (state->pressed) {
+        layer_on(l);
+    } else {
+        tap(kc);
+    }
+}
 
 // kc1 + kc2 on tap, kc3 on hold
 void tk2_hk ( qk_tap_dance_state_t *state,
