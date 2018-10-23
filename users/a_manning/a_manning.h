@@ -3,87 +3,23 @@
 #include "quantum.h"
 #include "process_keycode/process_tap_dance.h"
 
-void reg(uint16_t kc);
-void unreg(uint16_t kc);
-// registers kc1 + kc2
-void reg2( uint16_t kc1, uint16_t kc2 );
-// unregisters kc2, then kc1
-void unreg2( uint16_t kc1, uint16_t kc2 );
-void tap(uint16_t kc);
-// kc1 + kc2
-void tap2(uint16_t kc1, uint16_t kc2);
-// shift + kc
-void sh(uint16_t kc);
-
 //////////////
 // tap actions
 //////////////
 
-// kc on tap
-void tk( qk_tap_dance_state_t *state, uint16_t kc );
-// kc1 + kc2 on tap
-void tk2( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 );
+// taps kc with mods on tap
+void tmk( qk_tap_dance_state_t *state, uint8_t mods, uint16_t kc );
 
 ///////////////
 // hold actions
 ///////////////
 
-// kc1 on tap, hold kc2 on hold
-void tk_hk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 );
-
-// kc on tap, hold l on hold
-void tk_hl ( qk_tap_dance_state_t *state, uint16_t kc, uint8_t l );
-
-// kc1 + kc2 on tap, hold kc3 on hold
-void tk2_hk ( qk_tap_dance_state_t *state,
+// taps kc1 with mods1 on tap, taps kc2 with mods2 on hold.
+void tmk_tmk( qk_tap_dance_state_t *state,
+              uint8_t mods1,
               uint16_t kc1,
-              uint16_t kc2,
-              uint16_t kc3 );
-
-// kc1 + kc2 on tap, hold l on hold
-void tk2_hl ( qk_tap_dance_state_t *state,
-              uint16_t kc1,
-              uint16_t kc2,
-              uint8_t  l );
-
-// kc1 on tap, hold kc2 + kc3 on hold
-void tk_hk2( qk_tap_dance_state_t *state,
-             uint16_t kc1,
-             uint16_t kc2,
-             uint16_t kc3 );
-
-// kc1 + kc2 on tap, hold kc3 + kc4 on hold
-void tk2_hk2( qk_tap_dance_state_t *state,
-              uint16_t kc1,
-              uint16_t kc2,
-              uint16_t kc3,
-              uint16_t kc4 );
-
-// kc1 on tap, tap kc2 on hold
-void tk_tk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 );
-
-// kc1 + kc2 on tap, tap kc3 on hold
-void tk2_tk ( qk_tap_dance_state_t *state,
-              uint16_t kc1,
-              uint16_t kc2,
-              uint16_t kc3 );
-
-// kc1 on tap, tap kc2 + kc3 on hold
-void tk_tk2( qk_tap_dance_state_t *state,
-             uint16_t kc1,
-             uint16_t kc2,
-             uint16_t kc3 );
-
-////////////////
-// reset actions
-////////////////
-
-// reset 1 key
-void rs(uint16_t kc1);
-// reset 2 keys
-void rs2(uint16_t kc1, uint16_t kc2);
-// resets layer
-void rsl(uint8_t l);
+              uint8_t mods2,
+              uint16_t kc2 );
 
 // declaring a tap dance
 #define TDFN(name) ACTION_TAP_DANCE_FN_ADVANCED(td_tap_##name, td_fin_##name, td_rst_##name)
@@ -92,51 +28,26 @@ void rsl(uint8_t l);
 // defining `td_tap_##name`, `td_fin_##name`, `td_rst_#name`
 ////////////////////////////////////////////////////////////
 
-
-// kc1 on tap, holds kc2 on hold.
-#define TDTKHK(name, kc1, kc2) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk(state, kc1);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk_hk(state, kc1, kc2);}; \
-    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {rs(kc2);};
-
-// kc on tap, holds l on hold.
-#define TDTKHL(name, kc, l) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk(state, kc);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk_hl(state, kc, l);}; \
-    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {rsl(l);};
-
-// kc1 + kc2 on tap, holds kc3 on hold.
-#define TDTK2HK(name, kc1, kc2, kc3) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk2(state, kc1, kc2);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk2_hk(state, kc1, kc2, kc3);}; \
-    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {rs(kc3);};
-
-// kc1 + kc2 on tap, holds l on hold.
-#define TDTK2HL(name, kc1, kc2, l) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk2(state, kc1, kc2);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk2_hl(state, kc1, kc2, l);}; \
-    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {rsl(l);};
-
-// kc1 on tap, holds kc2 + kc3 on hold.
-#define TDTKHK2(name, kc1, kc2, kc3) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk(state, kc1);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk_hk2(state, kc1, kc2, kc3);}; \
-    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {rs2(kc2, kc3);};
-
-// kc1 on tap, holds kc2 on hold.
-#define TDTKTK(name, kc1, kc2) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk(state, kc1);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk_tk(state, kc1, kc2);}; \
+// taps kc1 with mods1 on tap, taps kc2 with mods2 on hold
+#define TDTMKTMK(name, mods1, kc1, mods2, kc2) \
+    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tmk(state, mods1, kc1);}; \
+    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tmk_tmk(state, mods1, kc1, mods2, kc2);}; \
     void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {};
 
-// kc1 + kc2 on tap, taps kc3 on hold.
-#define TDTK2TK(name, kc1, kc2, kc3) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk2(state, kc1, kc2);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk2_tk(state, kc1, kc2, kc3);}; \
-    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {};
+// taps kc1 with mods on tap, taps kc2 on hold
+#define TDTMKTK(name, mods, kc1, kc2) TDTMKTMK(name, mods, kc1, 0x00, kc2)
 
-// kc1 on tap, taps kc2 + kc3 on hold.
-#define TDTKTK2(name, kc1, kc2, kc3) \
-    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tk(state, kc1);}; \
-    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tk_tk2(state, kc1, kc2, kc3);}; \
-    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {};
+// taps kc1 on tap, taps kc2 with mods on hold
+#define TDTKTMK(name, kc1, mods, kc2) TDTMKTMK(name, 0x00, kc1, mods, kc2)
+
+// kc1 on tap, taps kc2 on hold.
+#define TDTKTK(name, kc1, kc2) TDTMKTMK(name, 0x00, kc1, 0x00, kc2)
+
+// taps kc1 with shift on tap, taps kc2 with shift on hold
+#define TDTSHKTSHK(name, kc1, kc2) TDTMKTMK(name, MOD_LSFT, kc1, MOD_LSFT, kc2)
+
+// taps kc1 with shift on tap, taps kc2 on hold
+#define TDTSHKTK(name, kc1, kc2) TDTMKTMK(name, MOD_LSFT, kc1, 0x00, kc2)
+
+// taps kc1 on tap, taps kc2 with shift on hold
+#define TDTKTSHK(name, kc1, kc2) TDTMKTMK(name, 0x00, kc1, MOD_LSFT, kc2)

@@ -3,154 +3,63 @@
 #include "action.h"
 #include "process_keycode/process_tap_dance.h"
 
-// TODO: Put stuff here
-
-void reg(uint16_t kc) { register_code(kc); }
-void unreg(uint16_t kc) { unregister_code(kc); }
-// registers kc1 + kc2
-void reg2( uint16_t kc1, uint16_t kc2 ) {
-    reg(kc1);
-    reg(kc2);
-}
-// unregisters kc2, then kc1
-void unreg2( uint16_t kc1, uint16_t kc2 ) {
-    unreg(kc2);
-    unreg(kc1);
+// taps kc with mods
+void tapm(uint8_t mods, uint16_t kc) {
+    add_mods(mods);
+    register_code(kc);
+    unregister_code(kc);
+    del_mods(mods);
 }
 
-void tap(uint16_t kc) {
-    reg(kc);
-    unreg(kc);
-}
+// taps kc
+void tap(uint16_t kc) { tapm(0x00, kc); }
 
-// kc1 + kc2
-void tap2(uint16_t kc1, uint16_t kc2) {
-    reg(kc1);
-    tap(kc2);
-    unreg(kc1);
-}
+//////////////
+// tap actions
+//////////////
 
-// shift + kc
-void sh(uint16_t kc) { tap2(KC_LSFT, kc); }
+// taps kc with mods on tap
+void tmk( qk_tap_dance_state_t *state, uint8_t mods, uint16_t kc )
+    { if (state->count > 1) { tapm(mods, kc); } }
 
-// kc on tap
+// taps kc on tap
 void tk( qk_tap_dance_state_t *state, uint16_t kc )
-    { if (state->count > 1) { tap(kc); } }
+    { tmk(state, 0x00, kc); }
 
-// kc1 + kc2 on tap
-void tk2( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 )
-    { if (state->count > 1) { tap2(kc1, kc2); } }
+///////////////
+// hold actions
+///////////////
 
-
-// kc1 on tap, hold kc2 on hold
-void tk_hk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
-    if (state->pressed) {
-        reg(kc2);
-    } else {
-        tap(kc1);
-    }
-}
-
-// kc on tap, hold l on hold
-void tk_hl ( qk_tap_dance_state_t *state, uint16_t kc, uint8_t l ) {
-    if (state->pressed) {
-        layer_on(l);
-    } else {
-        tap(kc);
-    }
-}
-
-// kc1 + kc2 on tap, hold kc3 on hold
-void tk2_hk ( qk_tap_dance_state_t *state,
+// taps kc1 with mods1 on tap, taps kc2 with mods2 on hold.
+void tmk_tmk( qk_tap_dance_state_t *state,
+              uint8_t mods1,
               uint16_t kc1,
-              uint16_t kc2,
-              uint16_t kc3 ) {
-    if (state->pressed) {
-        reg(kc3);
+              uint8_t mods2,
+              uint16_t kc2 ) {
+    if (state->pressed && !state->interrupted) {
+        tapm(mods2, kc2);
     } else {
-        tap2(kc1, kc2);
+        tapm(mods1, kc1);
     }
 }
 
-// kc1 + kc2 on tap, hold l on hold
-void tk2_hl ( qk_tap_dance_state_t *state,
-              uint16_t kc1,
-              uint16_t kc2,
-              uint8_t  l ) {
-    if (state->pressed) {
-        layer_on(l);
-    } else {
-        tap2(kc1, kc2);
-    }
+// taps kc1 on tap, taps kc2 on hold
+void tk_tk( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
+    tmk_tmk(state, 0x00, kc1, 0x00, kc2);
 }
 
-// kc1 on tap, hold kc2 + kc3 on hold
-void tk_hk2( qk_tap_dance_state_t *state,
+// taps kc1 with mods on tap, taps kc2 on hold
+void tmk_tk( qk_tap_dance_state_t *state,
+             uint8_t mods,
              uint16_t kc1,
-             uint16_t kc2,
-             uint16_t kc3 ) {
-    if (state->pressed) {
-        reg2(kc2, kc3);
-    } else {
-        tap(kc1);
-    }
+             uint16_t kc2 ) {
+    tmk_tmk(state, mods, kc1, 0x00, kc2);
 }
 
-// kc1 + kc2 on tap, hold kc3 + kc4 on hold
-void tk2_hk2( qk_tap_dance_state_t *state,
-              uint16_t kc1,
-              uint16_t kc2,
-              uint16_t kc3,
-              uint16_t kc4 ) {
-    if (state->pressed) {
-        reg2(kc3, kc4);
-    } else {
-        tap2(kc1, kc2);
-    }
-}
-
-// kc1 on tap, tap kc2 on hold
-void tk_tk ( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
-    if (state->pressed && !state->interrupted) {
-        tap(kc2);
-    } else {
-        tap(kc1);
-    }
-}
-
-// kc1 + kc2 on tap, tap kc3 on hold
-void tk2_tk ( qk_tap_dance_state_t *state,
-              uint16_t kc1,
-              uint16_t kc2,
-              uint16_t kc3 ) {
-    if (state->pressed && !state->interrupted) {
-        tap(kc3);
-    } else {
-        tap2(kc1, kc2);
-    }
-}
-
-// kc1 on tap, tap kc2 + kc3 on hold
-void tk_tk2( qk_tap_dance_state_t *state,
+// taps kc1 on tap, taps kc2 with mods on hold
+void tk_tmk( qk_tap_dance_state_t *state,
              uint16_t kc1,
-             uint16_t kc2,
-             uint16_t kc3 ) {
-    if (state->pressed && !state->interrupted) {
-        tap2(kc2, kc3);
-    } else {
-        tap(kc1);
-    }
-}
-
-// reset 1 key
-void rs(uint16_t kc1){
-    unreg(kc1);
-}
-// reset 2 keys
-void rs2(uint16_t kc1, uint16_t kc2){
-    unreg2(kc1, kc2);
-}
-// resets layer
-void rsl(uint8_t l){
-    layer_off(l);
+             uint8_t mods,
+             uint16_t kc2 ) {
+    tmk_tmk(state, 0x00, kc1, mods, kc2);
 }
