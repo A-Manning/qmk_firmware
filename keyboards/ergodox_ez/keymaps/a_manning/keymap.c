@@ -5,7 +5,8 @@
 #include "a_manning.h"
 
 #define BASE 0 // default layer
-#define FN1 1 // function layer
+#define DEV 1 // dev layer
+#define FN0 2 // function layer
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
@@ -39,7 +40,17 @@ enum {
     COMM,
     DOT,
     MINS,
-    RET
+    RET,
+    EX,
+    AT,
+    OCT,
+    DLLR,
+    PRCT,
+    CRT,
+    AMP,
+    STAR,
+    NINE_,
+    ZERO_
 };
 
 // 1 !
@@ -69,9 +80,9 @@ TDTKTSHK(seven, KC_7, KC_7)
 // 8 *
 TDTKTSHK(eight, KC_8, KC_8)
 // 9
-TDTKTSHK(nine, KC_9, KC_COPY)
+TDTKTSHK(nine, KC_9, KC_NO)
 // 0
-TDTKTSHK(zero, KC_0, KC_PASTE)
+TDTKTSHK(zero, KC_0, KC_NO)
 // > ]
 TDTSHKTK(gt, KC_DOT, KC_RBRC)
 // + |
@@ -90,6 +101,27 @@ TDTKTSHK(dot, KC_DOT, KC_SCLN)
 TDTKTSHK(mins, KC_MINS, KC_SLSH)
 // Return (Shift + Return)
 TDTKTSHK(ret, KC_ENT, KC_ENT)
+
+// ! 1
+TDTSHKTK(ex, KC_1, KC_1)
+// @ 2
+TDTSHKTK(at, KC_2, KC_2)
+// # 3
+TDTSHKTK(oct, KC_3, KC_3)
+// $ 4
+TDTSHKTK(dllr, KC_4, KC_4)
+// % 5
+TDTSHKTK(prct, KC_5, KC_5)
+// ^ 6
+TDTSHKTK(crt, KC_6, KC_6)
+// & 7
+TDTSHKTK(amp, KC_7, KC_7)
+// * 8
+TDTSHKTK(star, KC_8, KC_8)
+//   9
+TDTSHKTK(nine_, KC_NO, KC_9)
+//   0
+TDTSHKTK(zero_, KC_NO, KC_0)
 
 // Tap Dance Definitions
 // Can be used as // TD(TD_IDENT)
@@ -117,18 +149,27 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [RPRN]  = TDFN(rprn),
     [COMM]  = TDFN(comm),
     [DOT]   = TDFN(dot),
-    [RET]   = TDFN(ret)
+    [RET]   = TDFN(ret),
+    [EX]    = TDFN(ex),
+    [AT]    = TDFN(at),
+    [OCT]   = TDFN(oct),
+    [DLLR]  = TDFN(dllr),
+    [PRCT]  = TDFN(prct),
+    [CRT]   = TDFN(crt),
+    [AMP]   = TDFN(amp),
+    [STAR]  = TDFN(star),
+    [NINE_] = TDFN(nine_),
+    [ZERO_] = TDFN(zero_)
 };
 
 #define BTC UC(0x20BF) // ₿
 #define ILS UC(0x20AA) // ₪
-#define TAB_FN LT(FN1, KC_TAB)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |   ESC  |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |  CUT   |
+ * |   ESC  |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |    ~   |   q  |   w  |   e  |   r  |   t  |  <   |           |   >  |   y  |   u  |   i  |   o  |   p  |   +    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -139,23 +180,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *   |  \   |      |      |      |  Mod |                                       |      |      |      |      |   /  |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        |  ₪   |  ₿   |       |      |        |
+ *                                        |  ₪   |  ₿   |       | DEV  |        |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      | Tab  |  Sup |       |      |        |      |
  *                                 | Space|      |------|       |------|  BSPC  |  Ret |
- *                                 |      | FN   |      |       |      |        |      |
+ *                                 |      |      |      |       |      |        |      |
  *                                 `--------------------'       `----------------------'
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
         // left hand
-        KC_ESC,    TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_CUT,
+        KC_ESC,    TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
         TD(TILD),  KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LT),
-        MO(FN1),   KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
+        MO(FN0),   KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
         KC_NO,     KC_NO,   KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
         TD(CTRL),  KC_NO,   KC_NO,   KC_NO,     KC_LALT,
-                                                      ILS,          BTC,
+                                                          ILS,      BTC,
                                                                     KC_LWIN,
                                                 KC_SPC,   TD(TAB),  KC_NO,
         // right hand
@@ -165,13 +206,55 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TD(RPRN), KC_B,    KC_N,      KC_M,      TD(COMM), TD(DOT),  TD(MINS),
                            KC_NO,     KC_NO,     KC_NO,    KC_NO,    KC_SLSH,
 
-        KC_NO,    KC_NO,
+        TG(DEV),  KC_NO,
         KC_NO,
         KC_RALT,  KC_BSPC, TD(RET)
 
     ),
 
-/* Keymap 1: Function keys
+/* Keymap 1: Inverted Numeric keys
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |  !   |  @   |  #   |  $   |  %   |      |           |      |  ^   |  &   |  *   |      |      |        |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
+ *                                 |      |      |      |       |      |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
+// Function layer
+[DEV] = LAYOUT_ergodox(
+       KC_TRNS, TD(EX),  TD(AT),  TD(OCT), TD(DLLR), TD(PRCT), KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,  KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,  KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                                     KC_TRNS,  KC_TRNS,
+                                                               KC_TRNS,
+                                           KC_TRNS,  KC_TRNS,  KC_TRNS,
+    // right hand
+       KC_TRNS, TD(CRT), TD(AMP), TD(STAR), TD(NINE_), TD(ZERO_), KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,   KC_TRNS,   KC_TRNS,
+                KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,   KC_TRNS,   KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,   KC_TRNS,   KC_TRNS,
+                         KC_TRNS, KC_TRNS,  KC_TRNS,   KC_TRNS,   KC_TRNS,
+       KC_TRNS, KC_TRNS,
+       KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS
+    ),
+
+/* Keymap 2: Function keys
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |        |  F1  | F2   |  F3  |  F4  |  F5  |  F6  |           |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |        |
@@ -192,8 +275,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 |      | tab  |      |       |      |      | enter|
  *                                 `--------------------'       `--------------------'
  */
-// Function layer 1
-[FN1] = LAYOUT_ergodox(
+// Function layer
+[FN0] = LAYOUT_ergodox(
        KC_NO,   KC_F1, KC_F2, KC_F3, KC_F4, KC_F5,     KC_F6,
        KC_NO,   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO,
        KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
@@ -211,11 +294,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_NO,  KC_NO,
        KC_NO,
        KC_NO,  KC_DEL,  S(KC_ENT)
-),
+    ),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
-    [1] = ACTION_LAYER_TAP_TOGGLE(FN1)                // FN1 - Momentary Layer 1 (Upper)
+    [1] = ACTION_LAYER_TAP_TOGGLE(FN0)                // FN0 - Momentary Layer 2
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
