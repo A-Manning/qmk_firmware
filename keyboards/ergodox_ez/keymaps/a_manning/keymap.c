@@ -184,7 +184,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      | Tab  |  Sup |       |      |        |      |
  *                                 | Space|      |------|       |------|  BSPC  |  Ret |
- *                                 |      |      |      |       |      |        |      |
+ *                                 |      |      |Alt-D |       |      |        |      |
  *                                 `--------------------'       `----------------------'
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
@@ -198,7 +198,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TD(CTRL),  KC_NO,   KC_NO,   KC_NO,     KC_LALT,
                                                           ILS,      BTC,
                                                                     KC_LWIN,
-                                                KC_SPC,   TD(TAB),  KC_NO,
+                                                KC_SPC,   TD(TAB),  LALT(KC_D),
         // right hand
         KC_NO,    TD(SIX), TD(SEVEN), TD(EIGHT), TD(NINE), TD(ZERO), KC_NO,
         TD(GT),   KC_Y,    KC_U,      KC_I,      KC_O,     KC_P,     KC_NO,
