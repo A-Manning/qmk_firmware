@@ -26,6 +26,7 @@ enum {
     LT,
     TAB,
     LPRN,
+    BAR,
     CTRL,
     SIX,
     SEVEN,
@@ -33,13 +34,12 @@ enum {
     NINE,
     ZERO,
     GT,
-    PLUS,
     QUOT,
     EQ,
     RPRN,
     COMM,
     DOT,
-    MINS,
+    SLSH,
     RET,
     EX,
     AT,
@@ -71,6 +71,8 @@ TDTSHKTK(lt, KC_COMM, KC_LBRC)
 TDTKTSHK(tab, KC_TAB, KC_TAB)
 // ( {
 TDTSHKTSHK(lprn, KC_9, KC_LBRC)
+// | _
+TDTSHKTSHK(bar, KC_BSLS, KC_MINS)
 // \ Ctrl
 TDTOSTK(ctrl, MOD_LCTL, KC_BSLS)
 // 6 ^
@@ -79,26 +81,24 @@ TDTKTSHK(six, KC_6, KC_6)
 TDTKTSHK(seven, KC_7, KC_7)
 // 8 *
 TDTKTSHK(eight, KC_8, KC_8)
-// 9
-TDTKTSHK(nine, KC_9, KC_NO)
+// 9 ?
+TDTKTSHK(nine, KC_9, KC_SLSH)
 // 0
 TDTKTSHK(zero, KC_0, KC_NO)
 // > ]
 TDTSHKTK(gt, KC_DOT, KC_RBRC)
-// + |
-TDTSHKTSHK(plus, KC_EQL, KC_BSLS)
 // ' "
 TDTKTSHK(quot, KC_QUOT, KC_QUOT)
-// = _
-TDTKTSHK(eq, KC_EQL, KC_MINS)
+// = +
+TDTKTSHK(eq, KC_EQL, KC_EQL)
 // ) }
 TDTSHKTSHK(rprn, KC_0, KC_RBRC)
 // , ;
 TDTKTK(comm, KC_COMM, KC_SCLN)
 // . :
 TDTKTSHK(dot, KC_DOT, KC_SCLN)
-// - ?
-TDTKTSHK(mins, KC_MINS, KC_SLSH)
+// / -
+TDTKTK(slsh, KC_SLSH, KC_MINS)
 // Return (Shift + Return)
 TDTKTSHK(ret, KC_ENT, KC_ENT)
 
@@ -118,8 +118,8 @@ TDTSHKTK(crt, KC_6, KC_6)
 TDTSHKTK(amp, KC_7, KC_7)
 // * 8
 TDTSHKTK(star, KC_8, KC_8)
-//   9
-TDTSHKTK(nine_, KC_NO, KC_9)
+// ? 9
+TDTSHKTK(nine_, KC_SLSH, KC_9)
 //   0
 TDTSHKTK(zero_, KC_NO, KC_0)
 
@@ -134,8 +134,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TILD]  = TDFN(tild),
     [LT]    = TDFN(lt),
     [TAB]   = TDFN(tab),
-    [MINS]  = TDFN(mins),
     [LPRN]  = TDFN(lprn),
+    [BAR]   = TDFN(bar),
     [CTRL]  = TDFN(ctrl),
     [SIX]   = TDFN(six),
     [SEVEN] = TDFN(seven),
@@ -143,12 +143,12 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [NINE]  = TDFN(nine),
     [ZERO]  = TDFN(zero),
     [GT]    = TDFN(gt),
-    [PLUS]  = TDFN(plus),
     [QUOT]  = TDFN(quot),
     [EQ]    = TDFN(eq),
     [RPRN]  = TDFN(rprn),
     [COMM]  = TDFN(comm),
     [DOT]   = TDFN(dot),
+    [SLSH]  = TDFN(slsh),
     [RET]   = TDFN(ret),
     [EX]    = TDFN(ex),
     [AT]    = TDFN(at),
@@ -171,13 +171,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |   ESC  |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |    ~   |   q  |   w  |   e  |   r  |   t  |  <   |           |   >  |   y  |   u  |   i  |   o  |   p  |   +    |
+ * |    ~   |   q  |   w  |   e  |   r  |   t  |  <   |           |   >  |   y  |   u  |   i  |   o  |   p  |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |   FN   |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   '  |   =    |
+ * |   FN   |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   '  |   +    |
  * |--------+------+------+------+------+------|  (   |           |   )  |------+------+------+------+------+--------|
- * |        |      |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
+ * |        |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |  \   |      |      |      |  Mod |                                       |      |      |      |      |   /  |
+ *   |  \   |      |      |      |  Mod |                                       |      |      |      |      |      |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |  ₪   |  ₿   |       | DEV  |        |
@@ -194,17 +194,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC,    TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
         TD(TILD),  KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LT),
         MO(FN0),   KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
-        KC_NO,     KC_NO,   KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
+        KC_NO,     TD(BAR), KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
         TD(CTRL),  KC_NO,   KC_NO,   KC_NO,     KC_LALT,
                                                           ILS,      BTC,
                                                                     KC_LWIN,
                                                 KC_SPC,   TD(TAB),  KC_NO,
         // right hand
         KC_NO,    TD(SIX), TD(SEVEN), TD(EIGHT), TD(NINE), TD(ZERO), KC_NO,
-        TD(GT),   KC_Y,    KC_U,      KC_I,      KC_O,     KC_P,     TD(PLUS),
+        TD(GT),   KC_Y,    KC_U,      KC_I,      KC_O,     KC_P,     KC_NO,
                   KC_H,    KC_J,      KC_K,      KC_L,     TD(QUOT), TD(EQ),
-        TD(RPRN), KC_B,    KC_N,      KC_M,      TD(COMM), TD(DOT),  TD(MINS),
-                           KC_NO,     KC_NO,     KC_NO,    KC_NO,    KC_SLSH,
+        TD(RPRN), KC_B,    KC_N,      KC_M,      TD(COMM), TD(DOT),  TD(SLSH),
+                           KC_NO,     KC_NO,     KC_NO,    KC_NO,    KC_NO,
 
         TG(DEV),  KC_NO,
         KC_NO,
@@ -215,7 +215,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 1: Inverted Numeric keys
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |        |  !   |  @   |  #   |  $   |  %   |      |           |      |  ^   |  &   |  *   |      |      |        |
+ * |        |  !   |  @   |  #   |  $   |  %   |      |           |      |  ^   |  &   |  *   |  ?   |      |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
