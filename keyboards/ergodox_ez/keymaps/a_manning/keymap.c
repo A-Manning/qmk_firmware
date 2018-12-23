@@ -72,10 +72,10 @@ TDTSHKTK(lt, KC_COMM, KC_LBRC)
 TDTKTSHK(bktk, KC_GRV, KC_GRV)
 // ( {
 TDTSHKTSHK(lprn, KC_9, KC_LBRC)
-// |
-TDTSHKTK(bar, KC_BSLS, KC_NO)
-// Ctrl (\) 
-TDTOSTK(ctrl, MOD_LCTL, KC_BSLS)
+// | (\)
+TDTSHKTK(bar, KC_BSLS, KC_BSLS)
+// Ctrl
+TDTOSTK(ctrl, MOD_LCTL, KC_NO)
 // Tab (Shift + Tab)
 TDTKTSHK(tab, KC_TAB, KC_TAB)
 // 6 ^
