@@ -37,6 +37,12 @@ void tos_tmk( qk_tap_dance_state_t *state,
               uint8_t mods2,
               uint16_t kc );
 
+// taps kc with mods1 on tap, toggles one-shot mods2 on hold
+void tmk_tos( qk_tap_dance_state_t *state,
+              uint8_t mods1,
+              uint16_t kc,
+              uint8_t mods2);
+
 ////////////////
 // reset actions
 ////////////////
@@ -86,6 +92,18 @@ void rst_mk(uint8_t mods, uint16_t kc);
 
 // toggles one-shot mods on tap, taps kc on hold
 #define TDTOSTK(name, mods, kc) TDTOSTMK(name, mods, 0x00, kc)
+
+// taps kc with mods1 on tap, toggles one-shot mods2 on hold
+#define TDTMKTOS(name, mods1, kc, mods2) \
+    void td_tap_##name (qk_tap_dance_state_t *state, void *user_data) {tmk(state, mods1, kc);}; \
+    void td_fin_##name (qk_tap_dance_state_t *state, void *user_data) {tmk_tos(state, mods1, kc, mods2);}; \
+    void td_rst_##name (qk_tap_dance_state_t *state, void *user_data) {};
+
+// taps kc on tap, toggles one-shot mods on hold
+#define TDTKTOS(name, kc, mods) TDTMKTOS(name, 0x00, kc, mods)
+
+// taps kc with shift on tap, toggles one-shot mods on hold
+#define TDTSHKTOS(name, kc, mods) TDTMKTOS(name, MOD_LSFT, kc, mods)
 
 // taps kc1 with mods1 on tap, holds kc2 with mods2 on hold
 #define TDTMKHMK(name, mods1, kc1, mods2, kc2) \

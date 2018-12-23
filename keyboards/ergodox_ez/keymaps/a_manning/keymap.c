@@ -22,8 +22,9 @@ enum {
     THREE,
     FOUR,
     FIVE,
-    TILD,
+    ESC,
     LT,
+    BKTK,
     TAB,
     LPRN,
     BAR,
@@ -39,7 +40,7 @@ enum {
     RPRN,
     COMM,
     DOT,
-    SLSH,
+    MINS,
     RET,
     EX,
     AT,
@@ -63,18 +64,20 @@ TDTKTSHK(three, KC_3, KC_3)
 TDTKTSHK(four, KC_4, KC_4)
 // 5 %
 TDTKTSHK(five, KC_5, KC_5)
-// ~ `
-TDTKTSHK(tild, KC_GRV, KC_GRV)
+// Esc (Shift + Esc)
+TDTKTSHK(esc, KC_ESC, KC_ESC)
 // < [
 TDTSHKTK(lt, KC_COMM, KC_LBRC)
-// Tab (Shift + Tab)
-TDTKTSHK(tab, KC_TAB, KC_TAB)
+// ` ~
+TDTKTSHK(bktk, KC_GRV, KC_GRV)
 // ( {
 TDTSHKTSHK(lprn, KC_9, KC_LBRC)
-// | _
-TDTSHKTSHK(bar, KC_BSLS, KC_MINS)
-// \ Ctrl
+// |
+TDTSHKTK(bar, KC_BSLS, KC_NO)
+// Ctrl (\) 
 TDTOSTK(ctrl, MOD_LCTL, KC_BSLS)
+// Tab (Shift + Tab)
+TDTKTSHK(tab, KC_TAB, KC_TAB)
 // 6 ^
 TDTKTSHK(six, KC_6, KC_6)
 // 7 &
@@ -97,8 +100,8 @@ TDTSHKTSHK(rprn, KC_0, KC_RBRC)
 TDTKTK(comm, KC_COMM, KC_SCLN)
 // . :
 TDTKTSHK(dot, KC_DOT, KC_SCLN)
-// / -
-TDTKTK(slsh, KC_SLSH, KC_MINS)
+// - _
+TDTKTSHK(mins, KC_MINS, KC_MINS)
 // Return (Shift + Return)
 TDTKTSHK(ret, KC_ENT, KC_ENT)
 
@@ -131,12 +134,13 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [THREE] = TDFN(three),
     [FOUR]  = TDFN(four),
     [FIVE]  = TDFN(five),
-    [TILD]  = TDFN(tild),
+    [ESC]   = TDFN(esc),
     [LT]    = TDFN(lt),
-    [TAB]   = TDFN(tab),
+    [BKTK]  = TDFN(bktk),
     [LPRN]  = TDFN(lprn),
     [BAR]   = TDFN(bar),
     [CTRL]  = TDFN(ctrl),
+    [TAB]   = TDFN(tab),
     [SIX]   = TDFN(six),
     [SEVEN] = TDFN(seven),
     [EIGHT] = TDFN(eight),
@@ -148,7 +152,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [RPRN]  = TDFN(rprn),
     [COMM]  = TDFN(comm),
     [DOT]   = TDFN(dot),
-    [SLSH]  = TDFN(slsh),
+    [MINS]  = TDFN(mins),
     [RET]   = TDFN(ret),
     [EX]    = TDFN(ex),
     [AT]    = TDFN(at),
@@ -169,46 +173,45 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |   ESC  |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
+ * |        |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |    ~   |   q  |   w  |   e  |   r  |   t  |  <   |           |   >  |   y  |   u  |   i  |   o  |   p  |        |
+ * |   ESC  |   q  |   w  |   e  |   r  |   t  |  <   |           |   >  |   y  |   u  |   i  |   o  |   p  |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |   FN   |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   '  |   +    |
+ * |    FN  |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   '  |   =    |
  * |--------+------+------+------+------+------|  (   |           |   )  |------+------+------+------+------+--------|
- * |        |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
+ * |    `   |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |  \   |      |      |      |  Mod |                                       |      |      |      |      |      |
+ *   |  \   |      |      |      |  Mod |                                       |      |      |      |      |   /   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        |  ₪   |  ₿   |       | DEV  |        |
+ *                                        |  ₪   |      |       |      |   ₿    |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      | Tab  |  Sup |       |      |        |      |
- *                                 | Space|      |------|       |------|  BSPC  |  Ret |
- *                                 |      |      |Alt-D |       |      |        |      |
+ *                                 |      |      |  Sup |       |      |        |      |
+ *                                 | Space|  TAB |------|       |------|  BSPC  |  Ret |
+ *                                 |      |      |Alt-D |       |  DEV |        |      |
  *                                 `--------------------'       `----------------------'
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
         // left hand
-        KC_ESC,    TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
-        TD(TILD),  KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LT),
-        MO(FN0),   KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
-        KC_NO,     TD(BAR), KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
-        TD(CTRL),  KC_NO,   KC_NO,   KC_NO,     KC_LALT,
-                                                          ILS,      BTC,
-                                                                    KC_LWIN,
-                                                KC_SPC,   TD(TAB),  LALT(KC_D),
+        KC_NO,    TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
+        TD(ESC),  KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LT),
+        MO(FN0),  KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
+        TD(BKTK), TD(BAR), KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
+        TD(CTRL), KC_NO,   KC_NO,   KC_NO,     KC_LALT,
+                                                         ILS,      KC_NO,
+                                                                   KC_LWIN,
+                                               KC_SPC,   TD(TAB),  LALT(KC_D),
         // right hand
         KC_NO,    TD(SIX), TD(SEVEN), TD(EIGHT), TD(NINE), TD(ZERO), KC_NO,
         TD(GT),   KC_Y,    KC_U,      KC_I,      KC_O,     KC_P,     KC_NO,
                   KC_H,    KC_J,      KC_K,      KC_L,     TD(QUOT), TD(EQ),
-        TD(RPRN), KC_B,    KC_N,      KC_M,      TD(COMM), TD(DOT),  TD(SLSH),
-                           KC_NO,     KC_NO,     KC_NO,    KC_NO,    KC_NO,
-
-        TG(DEV),  KC_NO,
+        TD(RPRN), KC_B,    KC_N,      KC_M,      TD(COMM), TD(DOT),  TD(MINS),
+                           KC_NO,     KC_NO,     KC_NO,    KC_NO,    KC_SLSH,
+        KC_NO,    BTC,
         KC_NO,
-        KC_RALT,  KC_BSPC, TD(RET)
+        TG(DEV),  KC_BSPC, TD(RET)
 
     ),
 

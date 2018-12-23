@@ -119,6 +119,18 @@ void tos_tmk( qk_tap_dance_state_t *state,
     }
 }
 
+// taps kc with mods1 on tap, toggles one-shot mods2 on hold
+void tmk_tos( qk_tap_dance_state_t *state,
+              uint8_t mods1,
+              uint16_t kc,
+              uint8_t mods2) {
+    if (state->pressed && !state->interrupted) {
+        tog_osm(mods2);
+    } else {
+        tapm(mods1, kc);
+    }
+}
+
 // taps kc1 on tap, taps kc2 on hold
 void tk_tk( qk_tap_dance_state_t *state, uint16_t kc1, uint16_t kc2 ) {
     tmk_tmk(state, 0x00, kc1, 0x00, kc2);
