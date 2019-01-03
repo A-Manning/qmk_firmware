@@ -17,18 +17,18 @@ enum custom_keycodes {
 
 // Tap Dance Declarations
 enum {
-    ONE = 0,
+    ESC = 0,
+    ONE,
     TWO,
     THREE,
     FOUR,
     FIVE,
-    ESC,
-    LT,
     BKTK,
-    TAB,
-    LPRN,
+    LT,
     BAR,
     CTRL,
+    LPRN,
+    TAB,
     SIX,
     SEVEN,
     EIGHT,
@@ -51,9 +51,13 @@ enum {
     AMP,
     STAR,
     NINE_,
-    ZERO_
+    ZERO_,
+    HOME,
+    END_
 };
 
+// Esc (Shift + Esc)
+TDTKTSHK(esc, KC_ESC, KC_ESC)
 // 1 !
 TDTKTSHK(one, KC_1, KC_1)
 // 2 @
@@ -64,16 +68,14 @@ TDTKTSHK(three, KC_3, KC_3)
 TDTKTSHK(four, KC_4, KC_4)
 // 5 %
 TDTKTSHK(five, KC_5, KC_5)
-// Esc (Shift + Esc)
-TDTKTSHK(esc, KC_ESC, KC_ESC)
-// < [
-TDTSHKTK(lt, KC_COMM, KC_LBRC)
 // ` ~
 TDTKTSHK(bktk, KC_GRV, KC_GRV)
+// < [
+TDTSHKTK(lt, KC_COMM, KC_LBRC)
 // ( {
 TDTSHKTSHK(lprn, KC_9, KC_LBRC)
-// | (\)
-TDTSHKTK(bar, KC_BSLS, KC_BSLS)
+// |
+TDTSHKTK(bar, KC_BSLS, KC_NO)
 // Ctrl
 TDTOSTK(ctrl, MOD_LCTL, KC_NO)
 // Tab (Shift + Tab)
@@ -126,17 +128,22 @@ TDTSHKTK(nine_, KC_SLSH, KC_9)
 //   0
 TDTSHKTK(zero_, KC_NO, KC_0)
 
+// home (ctrl+shift+left)
+TDTMKTK(home, MOD_LCTL, KC_LEFT, KC_HOME)
+// end  (ctrl+shift+right)
+TDTMKTK(end_, MOD_LCTL, KC_RGHT, KC_END)
+
 // Tap Dance Definitions
 // Can be used as // TD(TD_IDENT)
 qk_tap_dance_action_t tap_dance_actions[] = {
+    [ESC]   = TDFN(esc),
     [ONE]   = TDFN(one),
     [TWO]   = TDFN(two),
     [THREE] = TDFN(three),
     [FOUR]  = TDFN(four),
     [FIVE]  = TDFN(five),
-    [ESC]   = TDFN(esc),
-    [LT]    = TDFN(lt),
     [BKTK]  = TDFN(bktk),
+    [LT]    = TDFN(lt),
     [LPRN]  = TDFN(lprn),
     [BAR]   = TDFN(bar),
     [CTRL]  = TDFN(ctrl),
@@ -163,7 +170,9 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [AMP]   = TDFN(amp),
     [STAR]  = TDFN(star),
     [NINE_] = TDFN(nine_),
-    [ZERO_] = TDFN(zero_)
+    [ZERO_] = TDFN(zero_),
+    [HOME]  = TDFN(home),
+    [END_]  = TDFN(end_)
 };
 
 #define BTC UC(0x20BF) // ₿
@@ -173,15 +182,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |        |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
+ * |   ESC  |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |   ESC  |   q  |   w  |   e  |   r  |   t  |  <   |           |   >  |   y  |   u  |   i  |   o  |   p  |        |
+ * |    `   |   q  |   w  |   e  |   r  |   t  |  <   |           |   >  |   y  |   u  |   i  |   o  |   p  |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |    FN  |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   '  |   =    |
+ * |   FN   |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   '  |   =    |
  * |--------+------+------+------+------+------|  (   |           |   )  |------+------+------+------+------+--------|
- * |    `   |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
+ * |    \   |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |  \   |      |      |      |  Mod |                                       |      |      |      |      |   /   |
+ *   | CTRL |      |      |      |  Mod |                                       |      |      |      |      |   /   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |  ₪   |      |       |      |   ₿    |
@@ -195,10 +204,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
         // left hand
-        KC_NO,    TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
-        TD(ESC),  KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LT),
+        TD(ESC),  TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
+        TD(BKTK), KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LT),
         MO(FN0),  KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
-        TD(BKTK), TD(BAR), KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
+        KC_BSLS,  TD(BAR), KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
         TD(CTRL), KC_NO,   KC_NO,   KC_NO,     KC_LALT,
                                                          ILS,      KC_NO,
                                                                    KC_LWIN,
@@ -289,11 +298,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                        KC_NO,
                                      KC_NO, S(KC_TAB), KC_NO,
     // right hand
-       KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_F11,     KC_F12,     KC_NO,
-       KC_NO,  KC_PGUP, KC_HOME, KC_UP,   KC_END,     KC_NO,      KC_NO,
-               KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT,    KC_NO,      KC_NO,
-       KC_NO,  KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,      KC_NO,
-                        KC_NO,   KC_NO,   KC_NO,      KC_NO,      KC_NO,
+       KC_F7,  KC_F8,   KC_F9,    KC_F10,  KC_F11,   KC_F12, KC_NO,
+       KC_NO,  KC_PGUP, TD(HOME), KC_UP,   TD(END_), KC_NO,  KC_NO,
+               KC_PGDN, KC_LEFT,  KC_DOWN, KC_RGHT,  KC_NO,  KC_NO,
+       KC_NO,  KC_NO,   KC_NO,    KC_NO,   KC_NO,    KC_NO,  KC_NO,
+                        KC_NO,    KC_NO,   KC_NO,    KC_NO,  KC_NO,
        KC_NO,  KC_NO,
        KC_NO,
        KC_NO,  KC_DEL,  S(KC_ENT)
