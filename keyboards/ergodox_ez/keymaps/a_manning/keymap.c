@@ -74,8 +74,8 @@ TDTKTSHK(bktk, KC_GRV, KC_GRV)
 TDTSHKTK(lt, KC_COMM, KC_LBRC)
 // ( {
 TDTSHKTSHK(lprn, KC_9, KC_LBRC)
-// |
-TDTSHKTK(bar, KC_BSLS, KC_NO)
+// | backslash
+TDTSHKTK(bar, KC_BSLS, KC_BSLS)
 // Ctrl
 TDTOSTK(ctrl, MOD_LCTL, KC_NO)
 // Tab (Shift + Tab)
@@ -188,7 +188,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |   FN   |   a  |   s  |   d  |   f  |   g  |------|           |------|   h  |   j  |   k  |   l  |   '  |   =    |
  * |--------+------+------+------+------+------|  (   |           |   )  |------+------+------+------+------+--------|
- * |    \   |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
+ * |        |   |  |   z  |   x  |   c  |   v  |      |           |      |   b  |   n  |   m  |   ,  |   .  |   -    |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   | CTRL |      |      |      |  Mod |                                       |      |      |      |      |   /   |
  *   `----------------------------------'                                       `----------------------------------'
@@ -207,7 +207,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TD(ESC),  TD(ONE), TD(TWO), TD(THREE), TD(FOUR), TD(FIVE), KC_NO,
         TD(BKTK), KC_Q,    KC_W,    KC_E,      KC_R,     KC_T,     TD(LT),
         MO(FN0),  KC_A,    KC_S,    KC_D,      KC_F,     KC_G,
-        KC_BSLS,  TD(BAR), KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
+        KC_NO,    TD(BAR), KC_Z,    KC_X,      KC_C,     KC_V,     TD(LPRN),
         TD(CTRL), KC_NO,   KC_NO,   KC_NO,     KC_LALT,
                                                          ILS,      KC_NO,
                                                                    KC_LWIN,
